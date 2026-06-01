@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two Chairs · Performance Update · May 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:       #0D1117;
+    --deep:      #0F2235;
+    --teal:      #0B7B7B;
+    --teal-lt:   #12A8A8;
+    --teal-pale: #E6F4F4;
+    --sand:      #F5F0E8;
+    --warm:      #EDE8DC;
+    --slate:     #4A5568;
+    --mid:       #718096;
+    --rule:      #CBD5E0;
+    --white:     #FFFFFF;
+    --red:       #C53030;
+    --green:     #276749;
+    --amber:     #B7791F;
+    --font-disp: 'DM Serif Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--sand);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  /* COVER */
+  .cover {
+    background: var(--deep);
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover-grid { display: grid; grid-template-columns: 1fr 1px 1fr; height: 100%; }
+  .cover-left { padding: 72px 60px; display: flex; flex-direction: column; justify-content: space-between; }
+  .cover-divider { background: rgba(255,255,255,0.12); width: 1px; }
+  .cover-right { padding: 72px 60px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .cover-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.2em; color: var(--teal-lt); text-transform: uppercase; margin-bottom: 20px; }
+  .cover-title { font-family: var(--font-disp); font-size: clamp(48px,7vw,88px); color: var(--white); line-height: 1.0; margin-bottom: 8px; animation: fadeUp 0.8s ease both; }
+  .cover-subtitle { font-family: var(--font-disp); font-style: italic; font-size: clamp(22px,3.5vw,38px); color: var(--teal-lt); line-height: 1.2; animation: fadeUp 0.8s 0.15s ease both; }
+  .cover-meta { margin-top: 48px; }
+  .cover-meta-item { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 2; letter-spacing: 0.05em; }
+  .cover-meta-item strong { color: rgba(255,255,255,0.85); font-weight: 500; }
+  .cover-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.08); animation: fadeUp 0.8s 0.3s ease both; }
+  .cover-stat { background: rgba(15,34,53,0.6); padding: 28px 24px; }
+  .cover-stat-val { font-family: var(--font-disp); font-size: 36px; color: var(--white); line-height: 1; margin-bottom: 4px; }
+  .cover-stat-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal-lt); font-weight: 500; }
+  .cover-bar { background: var(--teal); padding: 18px 60px; display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
+  .cover-bar-item { font-size: 11px; color: rgba(255,255,255,0.7); letter-spacing: 0.08em; }
+  .cover-bar-item::before { content: '●'; color: var(--teal-lt); margin-right: 8px; font-size: 8px; }
+
+  /* TABS */
+  .tab-nav {
+    background: var(--deep);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    border-bottom: 2px solid rgba(255,255,255,0.08);
+    overflow-x: auto;
+  }
+  .tab-nav::-webkit-scrollbar { height: 0; }
+  .tab-btn {
+    padding: 16px 28px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    white-space: nowrap;
+    transition: color 0.2s, border-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tab-btn:hover { color: rgba(255,255,255,0.75); }
+  .tab-btn.active { color: var(--teal-lt); border-bottom-color: var(--teal-lt); }
+  .tab-icon { font-size: 14px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* LAYOUT */
+  .report { max-width: 1100px; margin: 0 auto; padding: 60px 40px; }
+
+  /* SECTIONS */
+  .section { margin-top: 72px; }
+  .section:first-child { margin-top: 0; }
+  .section-label { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
+  .section-label-line { flex: 1; height: 1px; background: var(--rule); }
+  .section-label-text { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); font-weight: 600; white-space: nowrap; }
+
+  /* EXEC BLOCK */
+  .exec-block { background: var(--deep); padding: 40px 48px; position: relative; overflow: hidden; }
+  .exec-block::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--teal-lt); }
+  .exec-text { font-size: 15px; line-height: 1.75; color: rgba(255,255,255,0.82); font-weight: 300; }
+  .exec-text strong { color: var(--white); font-weight: 500; }
+
+  /* TILES */
+  .tile-grid { display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-bottom: 40px; }
+  .tile-grid-3 { grid-template-columns: repeat(3,1fr); }
+  .tile-grid-4 { grid-template-columns: repeat(4,1fr); }
+  .tile-grid-5 { grid-template-columns: repeat(5,1fr); }
+  .tile-grid-6 { grid-template-columns: repeat(6,1fr); }
+  .tile { background: var(--white); padding: 24px 20px; display: flex; flex-direction: column; gap: 4px; animation: fadeUp 0.5s ease both; }
+  .tile:nth-child(1){animation-delay:.05s} .tile:nth-child(2){animation-delay:.10s} .tile:nth-child(3){animation-delay:.15s}
+  .tile:nth-child(4){animation-delay:.20s} .tile:nth-child(5){animation-delay:.25s} .tile:nth-child(6){animation-delay:.30s}
+  .tile:nth-child(7){animation-delay:.35s} .tile:nth-child(8){animation-delay:.40s} .tile:nth-child(9){animation-delay:.45s}
+  .tile-val { font-family: var(--font-disp); font-size: 32px; color: var(--deep); line-height: 1; }
+  .tile-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mid); font-weight: 500; margin-top: 4px; }
+  .tile-sub { font-size: 11px; color: var(--teal); font-weight: 500; }
+  .tile.accent { background: var(--teal); }
+  .tile.accent .tile-val { color: var(--white); }
+  .tile.accent .tile-label { color: rgba(255,255,255,0.6); }
+  .tile.accent .tile-sub { color: rgba(255,255,255,0.85); }
+  .tile.dark { background: var(--deep); }
+  .tile.dark .tile-val { color: var(--white); }
+  .tile.dark .tile-label { color: rgba(255,255,255,0.5); }
+  .tile.dark .tile-sub { color: var(--teal-lt); }
+  .tile.green-tile { background: #EDF7F0; }
+  .tile.green-tile .tile-val { color: var(--green); }
+  .tile.green-tile .tile-label { color: var(--green); opacity: 0.7; }
+
+  /* PLATFORM BAND */
+  .platform-band { background: var(--deep); padding: 28px 36px; display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: center; margin-bottom: 32px; }
+  .platform-icon { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; background: rgba(255,255,255,0.1); }
+  .platform-band-title { font-family: var(--font-disp); font-size: 26px; color: var(--white); }
+  .platform-band-sub { font-size: 12px; color: var(--teal-lt); letter-spacing: 0.05em; margin-top: 2px; }
+
+  /* TABLES */
+  .tbl-wrap { overflow-x: auto; margin-bottom: 28px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { background: var(--deep); color: rgba(255,255,255,0.9); font-weight: 500; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; padding: 12px 14px; text-align: left; border: none; }
+  tbody tr:nth-child(odd) { background: var(--white); }
+  tbody tr:nth-child(even) { background: var(--warm); }
+  tbody tr.total-row { background: var(--teal-pale); }
+  tbody tr.total-row td { font-weight: 600; color: var(--deep); }
+  tbody td { padding: 11px 14px; color: var(--slate); border-bottom: 1px solid var(--rule); }
+  tbody td:first-child { color: var(--ink); font-weight: 500; }
+
+  /* SUB HEADING */
+  .sub-heading { font-size: 11px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); margin: 32px 0 12px; }
+
+  /* BODY TEXT */
+  .body-text { font-size: 14px; color: var(--slate); line-height: 1.75; margin-bottom: 20px; max-width: 740px; }
+  .body-text strong { color: var(--ink); font-weight: 600; }
+
+  /* NEXT STEPS */
+  .next-steps { background: var(--deep); padding: 32px 40px; position: relative; overflow: hidden; margin-top: 32px; }
+  .next-steps::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--teal-lt); }
+  .next-steps-title { font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal-lt); margin-bottom: 16px; }
+  .next-steps-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .next-steps-list li { font-size: 13px; color: rgba(255,255,255,0.78); line-height: 1.65; padding-left: 20px; position: relative; }
+  .next-steps-list li::before { content: '→'; position: absolute; left: 0; color: var(--teal-lt); font-weight: 600; }
+  .next-steps-list li strong { color: var(--white); }
+
+  /* INSIGHTS */
+  .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-bottom: 40px; }
+  .insight-card { background: var(--white); padding: 32px 28px; }
+  .insight-num { font-family: var(--font-disp); font-size: 48px; color: var(--teal-pale); line-height: 1; margin-bottom: -8px; }
+  .insight-title { font-size: 14px; font-weight: 600; color: var(--deep); margin-bottom: 10px; line-height: 1.3; }
+  .insight-body { font-size: 13px; color: var(--slate); line-height: 1.7; }
+  .insight-body strong { color: var(--ink); }
+
+  /* WATCH / ALERT */
+  .alert-block { background: var(--teal-pale); border-left: 3px solid var(--teal); padding: 14px 18px; margin-bottom: 12px; }
+  .alert-block.amber { background: #FFF8EC; border-left-color: var(--amber); }
+  .alert-label { font-size: 11px; font-weight: 600; color: var(--teal); letter-spacing: 0.1em; text-transform: uppercase; }
+  .alert-block.amber .alert-label { color: var(--amber); }
+  .alert-block p { font-size: 13px; color: var(--slate); margin-top: 4px; line-height: 1.65; }
+
+  /* FOOTNOTE */
+  .footnote { margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--rule); font-size: 11px; color: var(--mid); line-height: 1.7; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .cover-grid { grid-template-columns: 1fr; }
+    .cover-divider { display: none; }
+    .cover-left, .cover-right { padding: 40px 24px; }
+    .tile-grid-6, .tile-grid-5 { grid-template-columns: repeat(3,1fr); }
+    .tile-grid-4 { grid-template-columns: repeat(2,1fr); }
+    .insight-grid { grid-template-columns: 1fr; }
+    .report { padding: 40px 20px; }
+    .tab-btn { padding: 14px 14px; font-size: 10px; }
+  }
+  @media print {
+    .cover { min-height: auto; page-break-after: always; }
+    .tab-nav { display: none; }
+    .tab-panel { display: block !important; }
+    .section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-grid">
+    <div class="cover-left">
+      <div>
+        <div class="cover-eyebrow">Performance Update · May 2026</div>
+        <div class="cover-title">Two<br>Chairs</div>
+        <div class="cover-subtitle">Social Performance<br>Report</div>
+      </div>
+      <div class="cover-meta">
+        <div class="cover-meta-item"><strong>Platforms</strong> &ensp;Google Search · Meta · LinkedIn</div>
+        <div class="cover-meta-item"><strong>Geos</strong> &ensp;California · Washington, USA</div>
+        <div class="cover-meta-item"><strong>Campaign</strong> &ensp;Therapist Recruitment · Always-On</div>
+        <div class="cover-meta-item"><strong>Prepared by</strong> &ensp;Joveo Performance Marketing</div>
+      </div>
+    </div>
+    <div class="cover-divider"></div>
+    <div class="cover-right">
+      <div class="cover-stat-grid">
+        <div class="cover-stat">
+          <div class="cover-stat-val">$1,607</div>
+          <div class="cover-stat-label">Total Spend</div>
+        </div>
+        <div class="cover-stat">
+          <div class="cover-stat-val">303K</div>
+          <div class="cover-stat-label">Impressions</div>
+        </div>
+        <div class="cover-stat">
+          <div class="cover-stat-val">3,826</div>
+          <div class="cover-stat-label">Total Clicks</div>
+        </div>
+        <div class="cover-stat">
+          <div class="cover-stat-val">7</div>
+          <div class="cover-stat-label">Total Conversions</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cover-bar">
+    <span class="cover-bar-item">Google Search</span>
+    <span class="cover-bar-item">Meta (Facebook / Instagram)</span>
+    <span class="cover-bar-item">LinkedIn Sponsored Content</span>
+    <span class="cover-bar-item">May 18 – May 31, 2026</span>
+  </div>
+</div>
+
+<!-- TAB NAV -->
+<div class="tab-nav">
+  <button class="tab-btn active" data-tab="overall"><span class="tab-icon">📊</span> Overall</button>
+  <button class="tab-btn" data-tab="google"><span class="tab-icon">🔍</span> Google Search</button>
+  <button class="tab-btn" data-tab="meta"><span class="tab-icon">📘</span> Meta</button>
+  <button class="tab-btn" data-tab="linkedin"><span class="tab-icon">💼</span> LinkedIn</button>
+</div>
+
+<!-- ═══ TAB: OVERALL ═══ -->
+<div id="tab-overall" class="tab-panel active">
+<div class="report">
+
+  <div class="section">
+    <div class="section-label"><span class="section-label-text">Executive Summary</span><div class="section-label-line"></div></div>
+    <div class="exec-block">
+      <p class="exec-text">
+        Two Chairs ran an always-on therapist recruitment campaign across <strong>Google Search, Meta (Facebook/Instagram),</strong> and <strong>LinkedIn</strong> in May 2026, targeting licensed therapists in California and Washington. Total investment of <strong>$1,606.66</strong> generated <strong>303K impressions</strong> and <strong>3,826 clicks</strong> at a blended CPC of <strong>$0.42</strong>. The campaign recorded <strong>7 total conversions</strong> — 6 on LinkedIn and 1 on Meta. Going into June, we have <strong>slowed Meta spend to reassess strategy</strong> and will be optimising towards Landing Page Views, while <strong>increasing LinkedIn investment</strong> given its stronger conversion performance. Google Search will be <strong>closely monitored</strong> with an A/B test of exact match keywords and a Performance Max campaign launching in June.
+      </p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><span class="section-label-text">Monthly Totals · All Platforms</span><div class="section-label-line"></div></div>
+    <div class="tile-grid tile-grid-6">
+      <div class="tile dark"><div class="tile-val">$1,607</div><div class="tile-label">Total Spend</div><div class="tile-sub">May 2026</div></div>
+      <div class="tile"><div class="tile-val">303K</div><div class="tile-label">Impressions</div><div class="tile-sub">All platforms</div></div>
+      <div class="tile"><div class="tile-val">3,826</div><div class="tile-label">Total Clicks</div><div class="tile-sub">All platforms</div></div>
+      <div class="tile accent"><div class="tile-val">1.26%</div><div class="tile-label">Overall CTR</div><div class="tile-sub">Combined</div></div>
+      <div class="tile"><div class="tile-val">$0.42</div><div class="tile-label">Blended CPC</div><div class="tile-sub">All platforms</div></div>
+      <div class="tile green-tile"><div class="tile-val">7</div><div class="tile-label">Conversions</div><div class="tile-sub">LI: 6 · Meta: 1</div></div>
+    </div>
+
+    <p class="sub-heading">Platform Summary</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Platform</th><th>Spend</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>CPC</th><th>CPM</th><th>Conversions</th></tr></thead>
+        <tbody>
+          <tr><td>Google Search</td><td>$307.90</td><td>2,768</td><td>99</td><td>3.58%</td><td>$3.11</td><td>$111.24</td><td>—</td></tr>
+          <tr><td>Meta</td><td>$684.50</td><td>238.3K</td><td>2,549</td><td>1.07%</td><td>$0.27</td><td>$2.87</td><td>1</td></tr>
+          <tr><td>LinkedIn</td><td>$614.26</td><td>62.3K</td><td>1,178</td><td>1.89%</td><td>$0.52</td><td>$9.86</td><td>6</td></tr>
+          <tr class="total-row"><td>TOTAL</td><td>$1,606.66</td><td>303.4K</td><td>3,826</td><td>1.26%</td><td>$0.42</td><td>$5.30</td><td>7</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:11px;color:var(--mid);margin-top:-16px;margin-bottom:0;">Google data covers May 25–31 (campaign launch). Meta and LinkedIn cover May 18–31.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><span class="section-label-text">Key Insights &amp; Opportunities</span><div class="section-label-line"></div></div>
+    <div class="insight-grid">
+      <div class="insight-card">
+        <div class="insight-num">01</div>
+        <div class="insight-title">LinkedIn Leads on Conversions — Budget Shifting Up</div>
+        <div class="insight-body">LinkedIn delivered <strong>6 of the 7 total conversions</strong> at a <strong>1.89% CTR</strong> — the highest engagement rate across all platforms. Given this performance, <strong>LinkedIn budget will be increased in June</strong> to capitalise on its proven conversion efficiency with the therapist audience.</div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">02</div>
+        <div class="insight-title">Meta — Slowing Down to Reassess Strategy</div>
+        <div class="insight-body">Meta reached <strong>134K unique profiles</strong> at a low $2.87 CPM but returned only <strong>1 conversion</strong>. Spend was intentionally slowed towards the end of May to reassess approach. Going forward, Meta campaigns will be optimised towards <strong>Landing Page Views</strong> to drive more qualified traffic before scaling spend again.</div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">03</div>
+        <div class="insight-title">Google Search — Monitoring &amp; Testing in June</div>
+        <div class="insight-body">Launched May 25 with a strong <strong>3.58% CTR</strong> but still in its learning phase. Google will be <strong>closely monitored</strong> in June. An <strong>A/B test of exact match keywords</strong> will run alongside a new <strong>Performance Max campaign</strong> to explore automated placements and incremental reach.</div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">04</div>
+        <div class="insight-title">May 29–31 Meta Delivery Drop — Pacing Risk</div>
+        <div class="insight-body">Meta spend fell from ~$62/day to under $5/day in the final 3 days of May, indicating end-of-month budget pacing. With Meta spend decreasing in June, even pacing should still be maintained to avoid wasted delivery at either end of the flight.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><span class="section-label-text">June Direction — All Channels</span><div class="section-label-line"></div></div>
+    <div class="next-steps">
+      <div class="next-steps-title">What We're Doing in June</div>
+      <ul class="next-steps-list">
+        <li><strong>Meta — Slowing down to reassess.</strong> Spend was intentionally pulled back in late May. Going forward, campaigns will optimise towards Landing Page Views to better qualify traffic before scaling up again.</li>
+        <li><strong>LinkedIn — Increasing budget.</strong> Strongest conversion performer with 6 conversions and best-in-class CTR. Scaling investment in June to drive more therapist applications.</li>
+        <li><strong>Google Search — Close monitoring.</strong> Campaign still in learning phase with only 7 days of data. Will be observed closely without major structural interference to allow Smart Bidding to stabilise.</li>
+        <li><strong>Google — A/B test: Exact Match keywords.</strong> Testing exact match alongside current match types to assess whether tighter keyword control improves CPC and conversion quality in the mental health space.</li>
+        <li><strong>Google — Performance Max campaign launch.</strong> Introducing a PMax campaign in June to leverage automated delivery across Search, Display, YouTube, and Discover for incremental therapist reach.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footnote">
+    Report period: May 2026 · Google Search: May 25–31 &ensp;|&ensp; Meta &amp; LinkedIn: May 18–31 &ensp;|&ensp; All currency in USD.<br>
+    Data sources: Google Ads · Meta Ads Manager · LinkedIn Campaign Manager &ensp;|&ensp; Prepared by Joveo Performance Marketing.
+  </div>
+
+</div>
+</div>
+
+<!-- ═══ TAB: GOOGLE SEARCH ═══ -->
+<div id="tab-google" class="tab-panel">
+<div class="report">
+
+  <div class="section">
+    <div class="platform-band">
+      <div class="platform-icon">🔍</div>
+      <div>
+        <div class="platform-band-title">Google Search — Conversion Engine</div>
+        <div class="platform-band-sub">May 25–31, 2026 · California + Washington · Traffic Based Optimisation</div>
+      </div>
+    </div>
+
+    <div class="tile-grid tile-grid-5">
+      <div class="tile dark"><div class="tile-val">$308</div><div class="tile-label">Spend</div><div class="tile-sub">May 25–31</div></div>
+      <div class="tile"><div class="tile-val">2,768</div><div class="tile-label">Impressions</div><div class="tile-sub"></div></div>
+      <div class="tile"><div class="tile-val">99</div><div class="tile-label">Clicks</div><div class="tile-sub"></div></div>
+      <div class="tile accent"><div class="tile-val">3.58%</div><div class="tile-label">CTR</div><div class="tile-sub">Highest CTR</div></div>
+      <div class="tile"><div class="tile-val">$3.11</div><div class="tile-label">CPC</div><div class="tile-sub"></div></div>
+    </div>
+
+    <p class="body-text">
+      Google Search launched on May 25 targeting therapists in California and Washington via Traffic Based Optimisation. Over 7 days the campaign delivered <strong>2,768 impressions</strong> and <strong>99 clicks</strong> at a <strong>3.58% CTR</strong> — strong for search, reflecting high keyword relevance. CPC of <strong>$3.11</strong> reflects the competitive healthcare/mental-health keyword space. California drove the majority of volume with 70 clicks vs Washington's 29.
+    </p>
+
+    <p class="sub-heading">Performance by Geography</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Geography</th><th>Spend</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>CPC</th></tr></thead>
+        <tbody>
+          <tr><td>California</td><td>$158.75</td><td>2,040</td><td>70</td><td>3.43%</td><td>$2.27</td></tr>
+          <tr><td>Washington</td><td>$149.15</td><td>728</td><td>29</td><td>3.98%</td><td>$5.14</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="sub-heading">Daily Spend Trend (May 25–31)</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Date</th><th>Spend</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>CPC</th></tr></thead>
+        <tbody>
+          <tr><td>25 May</td><td>$2.46</td><td>153</td><td>1</td><td>0.65%</td><td>$2.46</td></tr>
+          <tr><td>26 May</td><td>$117.97</td><td>1,163</td><td>34</td><td>2.92%</td><td>$3.47</td></tr>
+          <tr><td>27 May</td><td>$70.55</td><td>455</td><td>23</td><td>5.05%</td><td>$3.07</td></tr>
+          <tr><td>28 May</td><td>$59.42</td><td>414</td><td>22</td><td>5.31%</td><td>$2.70</td></tr>
+          <tr><td>29 May</td><td>$9.45</td><td>214</td><td>3</td><td>1.40%</td><td>$3.15</td></tr>
+          <tr><td>30 May</td><td>$5.38</td><td>92</td><td>2</td><td>2.17%</td><td>$2.69</td></tr>
+          <tr><td>31 May</td><td>$42.67</td><td>277</td><td>14</td><td>5.05%</td><td>$3.05</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert-block">
+      <span class="alert-label">Watch Item</span>
+      <p>Spend spiked on May 26 ($117.97) then tapered — likely delivery normalisation post-launch. With only 7 days of data, Smart Bidding has not completed its learning phase. <strong>Avoid major bid/budget changes in the first two weeks of June.</strong></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><span class="section-label-text">June Direction — Google Search</span><div class="section-label-line"></div></div>
+    <div class="next-steps">
+      <div class="next-steps-title">What We're Doing in June</div>
+      <ul class="next-steps-list">
+        <li><strong>Close monitoring.</strong> Campaign is in its learning phase with only 7 days of live data. We will observe performance weekly without making major structural changes until Smart Bidding has sufficient data to stabilise delivery.</li>
+        <li><strong>A/B test — Exact Match keywords.</strong> Launching a test of exact match keyword variants alongside current match types to assess whether tighter query control reduces wasted spend and improves CPC in the competitive mental health keyword space.</li>
+        <li><strong>Performance Max campaign launch.</strong> A new Performance Max campaign will be introduced in June to leverage Google's automated asset optimisation across Search, Display, YouTube, Gmail, and Discover — testing incremental reach beyond current keyword-based campaigns.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footnote">
+    Google Search data covers May 25–31, 2026 · California + Washington · All currency in USD.<br>
+    Data source: Google Ads &ensp;|&ensp; Prepared by Joveo Performance Marketing.
+  </div>
+
+</div>
+</div>
+
+<!-- ═══ TAB: META ═══ -->
+<div id="tab-meta" class="tab-panel">
+<div class="report">
+
+  <div class="section">
+    <div class="platform-band">
+      <div class="platform-icon">📘</div>
+      <div>
+        <div class="platform-band-title">Meta — Facebook / Instagram</div>
+        <div class="platform-band-sub">May 18–31, 2026 · California + Washington · Feed &amp; Audience Network &amp; Reels</div>
+      </div>
+    </div>
+
+    <div class="tile-grid tile-grid-4">
+      <div class="tile dark"><div class="tile-val">$685</div><div class="tile-label">Spend</div><div class="tile-sub">May 18–31</div></div>
+      <div class="tile"><div class="tile-val">238K</div><div class="tile-label">Impressions</div><div class="tile-sub"></div></div>
+      <div class="tile"><div class="tile-val">134K</div><div class="tile-label">Unique Reach</div><div class="tile-sub">Profiles</div></div>
+      <div class="tile accent"><div class="tile-val">2,549</div><div class="tile-label">Link Clicks</div><div class="tile-sub">Highest volume</div></div>
+      <div class="tile"><div class="tile-val">1.07%</div><div class="tile-label">CTR</div><div class="tile-sub"></div></div>
+      <div class="tile"><div class="tile-val">$0.27</div><div class="tile-label">CPC</div><div class="tile-sub">Most efficient</div></div>
+      <div class="tile"><div class="tile-val">$2.87</div><div class="tile-label">CPM</div><div class="tile-sub">Lowest CPM</div></div>
+      <div class="tile"><div class="tile-val">1.78×</div><div class="tile-label">Frequency</div><div class="tile-sub">Avg impr/user</div></div>
+      <div class="tile green-tile"><div class="tile-val">1</div><div class="tile-label">Conversions</div><div class="tile-sub">May 18–31</div></div>
+    </div>
+
+    <p class="body-text">
+      Meta invested <strong>$684.50</strong> in May reaching <strong>134K unique profiles</strong> across California and Washington, delivering <strong>238K impressions</strong> at a <strong>$2.87 CPM</strong> and <strong>2,549 clicks</strong>. The channel returned <strong>1 conversion</strong> during the period. Towards the end of the month we <strong>slowed down spend to reassess strategy</strong> — going forward we will be optimising towards <strong>Landing Page Views</strong> to better qualify traffic and improve post-click performance.
+    </p>
+
+    <p class="sub-heading">Performance by Geography</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Geography</th><th>Spend</th><th>Impressions</th><th>Reach</th><th>Clicks</th><th>CPM</th><th>CPC</th></tr></thead>
+        <tbody>
+          <tr><td>Therapist – California</td><td>$348.97</td><td>109.1K</td><td>64.0K</td><td>1,442</td><td>$3.20</td><td>$0.24</td></tr>
+          <tr><td>Therapist – Washington</td><td>$335.53</td><td>129.2K</td><td>70.2K</td><td>1,107</td><td>$2.60</td><td>$0.30</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="sub-heading">Daily Performance Trend (May 18–31)</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Date</th><th>Spend</th><th>Impressions</th><th>Clicks</th><th>CTR</th></tr></thead>
+        <tbody>
+          <tr><td>18 May</td><td>$41.38</td><td>9,434</td><td>118</td><td>1.25%</td></tr>
+          <tr><td>19 May</td><td>$64.43</td><td>14,466</td><td>195</td><td>1.35%</td></tr>
+          <tr><td>20 May</td><td>$54.57</td><td>10,018</td><td>118</td><td>1.18%</td></tr>
+          <tr><td>21 May</td><td>$53.15</td><td>34,168</td><td>184</td><td>0.54%</td></tr>
+          <tr><td>22 May</td><td>$55.18</td><td>14,221</td><td>163</td><td>1.15%</td></tr>
+          <tr><td>23 May</td><td>$60.10</td><td>18,046</td><td>216</td><td>1.20%</td></tr>
+          <tr><td>24 May</td><td>$76.99</td><td>30,667</td><td>307</td><td>1.00%</td></tr>
+          <tr><td>25 May</td><td>$70.34</td><td>21,375</td><td>323</td><td>1.51%</td></tr>
+          <tr><td>26 May</td><td>$58.83</td><td>27,648</td><td>292</td><td>1.06%</td></tr>
+          <tr><td>27 May</td><td>$66.30</td><td>21,518</td><td>311</td><td>1.44%</td></tr>
+          <tr><td>28 May</td><td>$62.15</td><td>20,347</td><td>243</td><td>1.19%</td></tr>
+          <tr><td>29 May</td><td>$13.58</td><td>5,288</td><td>58</td><td>1.10%</td></tr>
+          <tr><td>30 May</td><td>$3.37</td><td>3,133</td><td>8</td><td>0.26%</td></tr>
+          <tr><td>31 May</td><td>$4.13</td><td>7,947</td><td>13</td><td>0.16%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert-block amber">
+      <span class="alert-label">Note</span>
+      <p>Spend slowed significantly in the final days of May (May 29–31) as we paused to <strong>reassess strategy</strong>. This was intentional — not a pacing issue. The slowdown gives us a clean starting point to relaunch with an optimisation towards <strong>Landing Page Views</strong> in June.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><span class="section-label-text">June Direction — Meta</span><div class="section-label-line"></div></div>
+    <div class="next-steps">
+      <div class="next-steps-title">What We're Doing in June</div>
+      <ul class="next-steps-list">
+        <li><strong>Slowed spend to reassess.</strong> We intentionally pulled back towards the end of May to take stock of performance and align on the right strategy before scaling further.</li>
+        <li><strong>Optimising towards Landing Page Views.</strong> Going forward, campaigns will be optimised for Landing Page Views rather than link clicks — ensuring we're driving traffic that actually reaches and engages with the destination page, not just tapping an ad.</li>
+        <li><strong>Continued creative testing.</strong> Creative variations will continue to run in June to identify the messaging and formats that resonate most with the therapist audience before budgets are increased.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footnote">
+    Meta data covers May 18–31, 2026 · California + Washington · All currency in USD.<br>
+    Data source: Meta Ads Manager &ensp;|&ensp; Prepared by Joveo Performance Marketing.
+  </div>
+
+</div>
+</div>
+
+<!-- ═══ TAB: LINKEDIN ═══ -->
+<div id="tab-linkedin" class="tab-panel">
+<div class="report">
+
+  <div class="section">
+    <div class="platform-band">
+      <div class="platform-icon">💼</div>
+      <div>
+        <div class="platform-band-title">LinkedIn — Professional Audience Reach</div>
+        <div class="platform-band-sub">May 18–29, 2026 · USA · Sponsored Content · Feed</div>
+      </div>
+    </div>
+
+    <div class="tile-grid tile-grid-6">
+      <div class="tile dark"><div class="tile-val">$614</div><div class="tile-label">Spend</div><div class="tile-sub">May 18–29</div></div>
+      <div class="tile"><div class="tile-val">62.3K</div><div class="tile-label">Impressions</div><div class="tile-sub"></div></div>
+      <div class="tile"><div class="tile-val">1,178</div><div class="tile-label">Clicks</div><div class="tile-sub"></div></div>
+      <div class="tile accent"><div class="tile-val">1.89%</div><div class="tile-label">CTR</div><div class="tile-sub">Best CTR overall</div></div>
+      <div class="tile"><div class="tile-val">$0.52</div><div class="tile-label">CPC</div><div class="tile-sub"></div></div>
+      <div class="tile"><div class="tile-val">$9.86</div><div class="tile-label">CPM</div><div class="tile-sub">Premium</div></div>
+      <div class="tile green-tile"><div class="tile-val">6</div><div class="tile-label">Conversions</div><div class="tile-sub">Best performer</div></div>
+    </div>
+
+    <p class="body-text">
+      LinkedIn Sponsored Content ran May 18–29 targeting therapists across California and Washington. The channel delivered <strong>62.3K impressions</strong> and <strong>1,178 clicks</strong> at a <strong>1.89% CTR</strong> — the highest engagement rate across all three platforms. The channel recorded <strong>6 conversions</strong>, making it the top-converting platform in May. CPM of <strong>$9.86</strong> reflects LinkedIn's professional targeting premium, which is justified by the quality of the therapist audience reached. <strong>LinkedIn budget will be increased in June</strong> to build on this momentum.
+    </p>
+
+    <p class="sub-heading">Daily Performance Trend (May 18–29)</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Date</th><th>Spend</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>CPC</th></tr></thead>
+        <tbody>
+          <tr><td>18 May</td><td>$60.18</td><td>3,768</td><td>86</td><td>2.28%</td><td>$0.70</td></tr>
+          <tr><td>19 May</td><td>$57.34</td><td>4,387</td><td>94</td><td>2.14%</td><td>$0.61</td></tr>
+          <tr><td>20 May</td><td>$54.95</td><td>7,085</td><td>107</td><td>1.51%</td><td>$0.51</td></tr>
+          <tr><td>21 May</td><td>$54.16</td><td>5,767</td><td>117</td><td>2.03%</td><td>$0.46</td></tr>
+          <tr><td>22 May</td><td>$52.89</td><td>5,358</td><td>84</td><td>1.57%</td><td>$0.63</td></tr>
+          <tr><td>23 May</td><td>$38.83</td><td>4,417</td><td>79</td><td>1.79%</td><td>$0.49</td></tr>
+          <tr><td>24 May</td><td>$31.65</td><td>3,431</td><td>87</td><td>2.54%</td><td>$0.36</td></tr>
+          <tr><td>25 May</td><td>$50.02</td><td>5,674</td><td>109</td><td>1.92%</td><td>$0.46</td></tr>
+          <tr><td>26 May</td><td>$57.17</td><td>4,916</td><td>116</td><td>2.36%</td><td>$0.49</td></tr>
+          <tr><td>27 May</td><td>$61.87</td><td>6,088</td><td>123</td><td>2.02%</td><td>$0.50</td></tr>
+          <tr><td>28 May</td><td>$55.99</td><td>7,645</td><td>97</td><td>1.27%</td><td>$0.58</td></tr>
+          <tr><td>29 May</td><td>$39.21</td><td>3,780</td><td>79</td><td>2.09%</td><td>$0.50</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert-block">
+      <span class="alert-label">Performance Note</span>
+      <p>Daily spend shows consistent pacing ($31–$62/day) with no creative fatigue signals — CTR held between 1.3–2.5% throughout the flight. LinkedIn delivered the highest conversion count of all platforms with <strong>6 conversions</strong>. <strong>Increasing budget in June should drive further conversion volume without materially impacting CPM.</strong></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label"><span class="section-label-text">June Direction — LinkedIn</span><div class="section-label-line"></div></div>
+    <div class="next-steps">
+      <div class="next-steps-title">What We're Doing in June</div>
+      <ul class="next-steps-list">
+        <li><strong>Increasing budget.</strong> LinkedIn is the top-converting platform with 6 conversions in May. Budget will be scaled up in June, funded in part by the reduction in Meta spend, to maximise therapist applications from this high-quality professional audience.</li>
+        <li><strong>Maintain creative pacing.</strong> CTR has been consistently strong with no fatigue signals. Creative will be refreshed proactively to maintain engagement rates as budget and impressions increase.</li>
+        <li><strong>Extend flight dates.</strong> The May campaign ran through May 29 only. June will run a full-month flight to capture the full potential of the increased budget without mid-month delivery gaps.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footnote">
+    LinkedIn data covers May 18–29, 2026 · USA · All currency in USD.<br>
+    Data source: LinkedIn Campaign Manager &ensp;|&ensp; Prepared by Joveo Performance Marketing.
+  </div>
+
+</div>
+</div>
+
+<script>
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var tab = this.getAttribute('data-tab');
+      document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+      document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+      this.classList.add('active');
+      document.getElementById('tab-' + tab).classList.add('active');
+      window.scrollTo({ top: document.querySelector('.tab-nav').offsetTop - 1, behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
